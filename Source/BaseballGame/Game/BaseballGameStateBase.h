@@ -14,4 +14,5 @@ class BASEBALLGAME_API ABaseballGameStateBase : public AGameStateBase
 public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastRPCBroadcastLoginMessage(const FString& InNameString = FString(TEXT("XXXXXXX")));
+
 };
