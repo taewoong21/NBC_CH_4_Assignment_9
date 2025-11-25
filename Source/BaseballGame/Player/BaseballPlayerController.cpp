@@ -2,19 +2,10 @@
 
 
 #include "Player/BaseballPlayerController.h"
-#include "Player/BaseballPlayerState.h"
 #include "UI/ChatInput.h"
-#include "Game/BaseballGameModeBase.h"
-#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "Net/UnrealNetwork.h"
 #include "BaseballGame.h"
 #include "EngineUtils.h"
-
-ABaseballPlayerController::ABaseballPlayerController()
-{
-	bReplicates = true;
-}
 
 void ABaseballPlayerController::BeginPlay()
 {
@@ -38,22 +29,6 @@ void ABaseballPlayerController::BeginPlay()
 			ChatInputWidgetInstance->AddToViewport();
 		}
 	}
-
-	if (IsValid(NotificationTextWidgetClass) == true)
-	{
-		NotificationTextWidgetInstance = CreateWidget<UUserWidget>(this, NotificationTextWidgetClass);
-		if (IsValid(NotificationTextWidgetInstance) == true)
-		{
-			NotificationTextWidgetInstance->AddToViewport();
-		}
-	}
-}
-
-void ABaseballPlayerController::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ThisClass, NotificationText);
 }
 
 void ABaseballPlayerController::SetChatMessageString(const FString& InChatMessageString)
@@ -64,15 +39,7 @@ void ABaseballPlayerController::SetChatMessageString(const FString& InChatMessag
 
 	if (IsLocalController() == true)
 	{
-		// ServerRPCPrintChatMessageString(InChatMessageString);
-
-		ABaseballPlayerState* BBPS = GetPlayerState<ABaseballPlayerState>();
-		if (IsValid(BBPS) == true)
-		{
-			FString CombinedMessageString = BBPS->GetPlayerInfoString() + TEXT(": ") + InChatMessageString;
-
-			ServerRPCPrintChatMessageString(CombinedMessageString);
-		}
+		ServerRPCPrintChatMessageString(InChatMessageString);
 	}
 }
 
@@ -87,30 +54,20 @@ void ABaseballPlayerController::PrintChatMessageString(const FString& InChatMess
 	BaseballGameFunctionLibrary::MyPrintString(this, InChatMessageString, 10.f);
 }
 
-void ABaseballPlayerController::ClientRPCPrintChatMessageString_Implementation(const FString& InChatMessageString)
-{
-	PrintChatMessageString(InChatMessageString);
-}
-
 void ABaseballPlayerController::ServerRPCPrintChatMessageString_Implementation(const FString& InChatMessageString)
 {
 	// Server에 존재하는 Player Controller 중 유효한 것을 찾기
-	/*for (TActorIterator<ABaseballPlayerController> It(GetWorld()); It; ++It)
+	for (TActorIterator<ABaseballPlayerController> It(GetWorld()); It; ++It)
 	{
 		ABaseballPlayerController* BBPlayerController = *It;
 		if (IsValid(BBPlayerController) == true)
 		{
 			BBPlayerController->ClientRPCPrintChatMessageString(InChatMessageString);
 		}
-	}*/
-
-	AGameModeBase* GM = UGameplayStatics::GetGameMode(this);
-	if (IsValid(GM) == true)
-	{
-		ABaseballGameModeBase* BBGM = Cast<ABaseballGameModeBase>(GM);
-		if (IsValid(BBGM) == true)
-		{
-			BBGM->PrintChatMessageString(this, InChatMessageString);
-		}
 	}
+}
+
+void ABaseballPlayerController::ClientRPCPrintChatMessageString_Implementation(const FString& InChatMessageString)
+{
+	PrintChatMessageString(InChatMessageString);
 }

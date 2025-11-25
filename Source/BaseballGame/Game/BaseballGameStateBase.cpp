@@ -21,5 +21,3 @@ void ABaseballGameStateBase::MulticastRPCBroadcastLoginMessage_Implementation(co
 		}
 	}
 }
-
-
