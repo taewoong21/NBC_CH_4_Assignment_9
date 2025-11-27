@@ -4,7 +4,7 @@
 #include "Player/BaseballPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
-ABaseballPlayerState::ABaseballPlayerState(): PlayerNameString(TEXT("None")), CurrentGuessCount(0), MaxGuessCount(3)
+ABaseballPlayerState::ABaseballPlayerState(): PlayerNameString(TEXT("None")), CurrentGuessCount(0), MaxGuessCount(3), TurnRemainingTime(30.0f), bHasGuessTrurn(false)
 {
 	bReplicates = true;
 }
@@ -16,6 +16,8 @@ void ABaseballPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProp
 	DOREPLIFETIME(ThisClass, PlayerNameString);
 	DOREPLIFETIME(ThisClass, CurrentGuessCount);
 	DOREPLIFETIME(ThisClass, MaxGuessCount);
+	DOREPLIFETIME(ThisClass, bHasGuessTrurn);
+	DOREPLIFETIME_CONDITION(ThisClass, TurnRemainingTime, COND_None); // DOREPLIFETIME_CONDITION - 값이 바뀌어도 자주 Replicate 하지 않음 (주기 최적화)
 }
 
 FString ABaseballPlayerState::GetPlayerInfoString()

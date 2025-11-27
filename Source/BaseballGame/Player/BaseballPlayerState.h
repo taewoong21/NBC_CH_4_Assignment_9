@@ -29,4 +29,10 @@ public:
 
 	UPROPERTY(Replicated)
 	int32 MaxGuessCount;
+
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	float TurnRemainingTime;
+
+	UPROPERTY(Replicated)
+	bool bHasGuessTrurn;
 };

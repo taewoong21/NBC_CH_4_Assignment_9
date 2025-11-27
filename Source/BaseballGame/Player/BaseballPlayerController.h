@@ -32,6 +32,7 @@ public:
 	void ServerRPCPrintChatMessageString(const FString& InChatMessageString);
 
 protected:
+	/* 입력 위젯 */
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UChatInput> ChatInputWidgetClass;
 
@@ -40,13 +41,21 @@ protected:
 
 	FString ChatMessageString;
 
+	/* 공지 위젯 */
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> NotificationTextWidgetClass;
 
 	UPROPERTY()
 	TObjectPtr<UUserWidget> NotificationTextWidgetInstance;
 
+	/* 턴 타이머 */
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> TurnTimerWidgetClass;
+
+	UPROPERTY()
+	TObjectPtr<UUserWidget> TurnTimerWidgetInstance;
+
 public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
-	FText NotificationText;
+	FText NotificationText; // 공지 내용
 };

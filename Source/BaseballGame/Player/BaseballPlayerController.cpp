@@ -47,6 +47,15 @@ void ABaseballPlayerController::BeginPlay()
 			NotificationTextWidgetInstance->AddToViewport();
 		}
 	}
+
+	if (IsValid(TurnTimerWidgetClass) == true)
+	{
+		TurnTimerWidgetInstance = CreateWidget<UUserWidget>(this, TurnTimerWidgetClass);
+		if (IsValid(TurnTimerWidgetInstance) == true)
+		{
+			TurnTimerWidgetInstance->AddToViewport();
+		}
+	}
 }
 
 void ABaseballPlayerController::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
