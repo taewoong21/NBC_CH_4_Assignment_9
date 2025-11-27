@@ -156,6 +156,8 @@ void ABaseballGameModeBase::Tick(float DeltaTime)
 						/* 턴 소진 결과 출력 */
 						FString Message = FString::Printf(TEXT("%s Time Out! Lost your turn."), *PS->PlayerNameString);
 						PC->ClientRPCPrintChatMessageString(Message);
+
+						JudgeGame(PC, 0);
 					}
 
 					/* 시간 및 상태 초기화 (다음 턴 시작) */
@@ -184,7 +186,6 @@ void ABaseballGameModeBase::PrintChatMessageString(ABaseballPlayerController* In
 		if (IsValid(PS) == true)
 		{
 			PS->bHasGuessTrurn = true; // 턴 진행
-			PS->TurnRemainingTime = MaxTurnDuration; // 다음 턴 즉시 시작
 		}
 
 		FString JudgeResultString = JudgeResult(SecretNumberString, GuessNumberString); // 게임 진행 및 결과 판단
@@ -228,6 +229,8 @@ void ABaseballGameModeBase::IncreaseGuessCount(ABaseballPlayerController* InChat
 
 void ABaseballGameModeBase::ResetGame()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Reset the Game. Start next round."));
+
 	SecretNumberString = GenerateSecretNumber();
 	UE_LOG(LogTemp, Error, TEXT("%s"), *SecretNumberString);
 

@@ -17,7 +17,7 @@ void ABaseballPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProp
 	DOREPLIFETIME(ThisClass, CurrentGuessCount);
 	DOREPLIFETIME(ThisClass, MaxGuessCount);
 	DOREPLIFETIME(ThisClass, bHasGuessTrurn);
-	DOREPLIFETIME_CONDITION(ThisClass, TurnRemainingTime, COND_None); // DOREPLIFETIME_CONDITION - 값이 바뀌어도 자주 Replicate 하지 않음 (주기 최적화)
+	DOREPLIFETIME(ThisClass, TurnRemainingTime); 
 }
 
 FString ABaseballPlayerState::GetPlayerInfoString()
